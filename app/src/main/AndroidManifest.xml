@@ -16,6 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".News_Display" />
+        <activity android:name=".Category" />
+        <activity android:name=".UserStoryActivity"></activity>
     </application>
 
 </manifest>

@@ -1,5 +1,6 @@
 package com.example.a1333609.myapplication;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -9,5 +10,7 @@ public class News_Display extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news__display);
+
+        Intent intent = getIntent();
     }
 }

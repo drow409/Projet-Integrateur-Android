@@ -17,8 +17,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".News_Display" />
-        <activity android:name=".Category" />
-        <activity android:name=".UserSettingsActivity"></activity>
+        <activity android:name=".Category_Settings" />
+        <activity android:name=".User_Settings" />
+        <activity android:name=".News_Category"></activity>
     </application>
 
 </manifest>

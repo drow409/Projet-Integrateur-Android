@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 
 public class Home extends AppCompatActivity {
 
@@ -17,7 +16,21 @@ public class Home extends AppCompatActivity {
 
     public void switchToNews(View view)
     {
-        Intent intent = new Intent(this, News_Display.class);
+        Intent intent = new Intent(this, News_Category.class);
+
+        startActivity(intent);
+    }
+
+    public void switchToParametre(View view)
+    {
+        Intent intent = new Intent(this, User_Settings.class);
+
+        startActivity(intent);
+    }
+
+    public void switchToCategory(View view)
+    {
+        Intent intent = new Intent(this, Category_Settings.class);
 
         startActivity(intent);
     }

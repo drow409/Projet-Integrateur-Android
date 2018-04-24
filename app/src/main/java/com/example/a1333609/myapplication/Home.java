@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.a1333609.data_structure.DataStructureManager;
+
 public class Home extends AppCompatActivity {
 
     @Override
@@ -30,9 +32,10 @@ public class Home extends AppCompatActivity {
 
     public void switchToCategory(View view)
     {
-        Intent intent = new Intent(this, Category_Settings.class);
+        //DataStructureManager.testJSONCreation();
+        /*Intent intent = new Intent(this, Category_Settings.class);
 
-        startActivity(intent);
+        startActivity(intent);*/
     }
 
 }

@@ -7,22 +7,32 @@ import java.util.ArrayList;
  * ne devrais pas contenir de nouvelles, mais l'application va être quand même être en mesure de le supporter.
  */
 
-public class Category implements DataStructureElement{
+public class Category extends DataStructureElement{
 
-    public String id;
-    public String displayName;
-    public ArrayList<DataStructureElement> elements;
-
-    public Category()
-    {
-        this("", "");
-    }
+    private String id;
+    private String displayName;
+    private ArrayList<DataStructureElement> elements;
 
     public Category(String id, String displayName)
     {
-        this.id = id;
-        this.displayName = displayName;
+        super(id, displayName);
         this.elements = new ArrayList<DataStructureElement>();
     }
+
+    public String getId()
+    {
+        return id;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public ArrayList<DataStructureElement> getElements() {
+        return elements;
+    }
+
+
+
 
 }

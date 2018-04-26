@@ -32,10 +32,21 @@ public class Home extends AppCompatActivity {
 
     public void switchToCategory(View view)
     {
-        //DataStructureManager.testJSONCreation();
+        saveJSON();
+        loadJSON();
         /*Intent intent = new Intent(this, Category_Settings.class);
 
         startActivity(intent);*/
+    }
+
+    public void loadJSON()
+    {
+        DataStructureManager.loadJSON(this);
+    }
+
+    public void saveJSON()
+    {
+        DataStructureManager.saveJSON(this, DataStructureManager.testJSONCreation());
     }
 
 }

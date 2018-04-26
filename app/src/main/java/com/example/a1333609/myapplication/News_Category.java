@@ -11,6 +11,12 @@ import android.widget.SimpleAdapter;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+import com.example.a1333609.data_structure.Category;
+import com.example.a1333609.data_structure.DataStructureElement;
+import com.example.a1333609.data_structure.DataStructureManager;
+
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class News_Category extends AppCompatActivity {
@@ -24,16 +30,23 @@ public class News_Category extends AppCompatActivity {
 
         sArray = new ArrayList<String>();
 
-        sArray.add("something1");
-
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, sArray);
 
         ListView lv = ((ListView)findViewById(R.id.list));
         lv.setAdapter(adapter);
 
-        sArray.add("something2");
+        populateCategory(DataStructureManager.getRootCategories());
     }
+
+    public void populateCategory(Category parent)
+    {
+        for(DataStructureElement e : parent.getElements())
+        {
+            sArray.add(e.getDisplayName());
+        }
+    }
+
 
 
     public void switchToNewsDisplay(View v)

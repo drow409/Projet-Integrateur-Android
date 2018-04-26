@@ -1,5 +1,6 @@
 package com.example.a1333609.data_structure;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.example.a1333609.data_structure.Category;
@@ -9,6 +10,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -19,21 +24,33 @@ public abstract class DataStructureManager {
 
     private static Category categories;
 
-    public static void initDataStructure()
+    public static final String JSON_FILE_NAME = "DataStructure";
+    public static final String ID_NODE_NAME = "id";
+    public static final String DISPLAY_NAME_NODE_NAME = "displayName";
+    public static final String CATEGORY_LIST_NODE_NAME = "categoryList";
+    public static final String NEWS_LIST_NODE_NAME = "newsList";
+    public static final String HTML_CONTENT_NODE_LIST = "htmlContent";
+
+    public static Category getRootCategories()
     {
         if(categories == null) {
             categories = new Category("main", "Main");
         }
+        return categories;
     }
 
-    public static Category getDataStructudeFromJson(JSONObject json) throws JSONException {
+    public static Category getDataStructureFromJson(JSONObject json){
 
-        Category cat = new Category();
+        Category cat = new Category("", "");
 
-        JSONArray mainCatArray = json.getJSONArray("categoryList");
+        try {
+            JSONArray mainCatArray = json.getJSONArray(CATEGORY_LIST_NODE_NAME);
 
-        cat = returnSubContent(cat, mainCatArray);
+            cat = returnSubContent(cat, mainCatArray);
+        }catch(JSONException e)
+        {
 
+        }
         return cat;
     }
 
@@ -42,51 +59,92 @@ public abstract class DataStructureManager {
         {
             JSONObject jsonObj = jarray.getJSONObject(j);
             //go get the news list
-            JSONArray newsList = jsonObj.getJSONArray("newsList");
+            JSONArray newsList = jsonObj.getJSONArray(NEWS_LIST_NODE_NAME);
 
             for(int i = 0; i < newsList.length(); i++)
             {
                 JSONObject jsonNews = newsList.getJSONObject(i);
 
-                News n = new News(jsonNews.getString("id"), jsonNews.getString("title"), jsonNews.getString("htmlContent"));
+                News n = new News(jsonNews.getString(ID_NODE_NAME), jsonNews.getString(DISPLAY_NAME_NODE_NAME), jsonNews.getString("htmlContent"));
 
-                parentCategory.elements.add(n);
+                parentCategory.getElements().add(n);
             }
 
             //go get the category list
-            JSONArray categoryList = jsonObj.getJSONArray("categoryList");
+            JSONArray categoryList = jsonObj.getJSONArray(CATEGORY_LIST_NODE_NAME);
             for(int i = 0; i < categoryList.length(); i++)
             {
-                Category subC = new Category();
+                Category subC = new Category("", "");
 
                 subC = returnSubContent(subC, categoryList);
 
-                parentCategory.elements.add(subC);
+                parentCategory.getElements().add(subC);
             }
         }
         return parentCategory;
     }
 
-    private static News createNews()
-    {
+    private static News createNews() {
         return null;
     }
 
-    private static void writeJSON()
-    {
-        //File file = new File(this.getFilesDir(), filename);
-    }
-
-    public static void testJSONCreation()
+    public static JSONObject testJSONCreation()
     {
         JSONObject jsonCategories = new JSONObject();
         JSONArray jsonMainCatArray = new JSONArray();
         try {
-            jsonCategories.put("categories", jsonMainCatArray);
+            jsonCategories.put(CATEGORY_LIST_NODE_NAME, jsonMainCatArray);
         } catch (JSONException e) {
             e.printStackTrace();
         }
         Log.i("JSON", jsonCategories.toString());
+
+        return jsonCategories;
+    }
+
+    /**
+     * saves a given JSONObject to the internal storage
+     * @param context
+     * @param json
+     */
+    public static void saveJSON(Context context, JSONObject json)
+    {
+        String filename = JSON_FILE_NAME;
+        String fileContent = json.toString();
+        try{
+            FileOutputStream out = context.openFileOutput(filename, Context.MODE_PRIVATE);
+            out.write(fileContent.getBytes());
+            out.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static JSONObject loadJSON(Context context)
+    {
+        JSONObject json = new JSONObject();
+        String filename = JSON_FILE_NAME;
+        try{
+            Log.i("ping", "start reading");
+            File f = new File(context.getFilesDir(), filename);
+            FileInputStream in = new FileInputStream(f);
+            String temp = "";
+            int content;
+            while ((content = in.read()) != -1) {
+                // convert to char and display it
+                temp += (char) content;
+            }
+            json = new JSONObject(temp);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return json;
     }
 
     /**
@@ -101,9 +159,9 @@ public abstract class DataStructureManager {
         JSONObject json = new JSONObject();
 
         try {
-            json.put("id", id);
-            json.put("title", title);
-            json.put("htmlContent", html);
+            json.put(ID_NODE_NAME, id);
+            json.put(DISPLAY_NAME_NODE_NAME, title);
+            json.put(HTML_CONTENT_NODE_LIST, html);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -122,10 +180,10 @@ public abstract class DataStructureManager {
         JSONObject json = new JSONObject();
 
         try {
-            json.put("id", id);
-            json.put("displayName", displayName);
-            json.put("categories", new JSONArray());
-            json.put("newsList", new JSONArray());
+            json.put(ID_NODE_NAME, id);
+            json.put(DISPLAY_NAME_NODE_NAME, displayName);
+            json.put(CATEGORY_LIST_NODE_NAME, new JSONArray());
+            json.put(NEWS_LIST_NODE_NAME, new JSONArray());
         } catch (JSONException e) {
             e.printStackTrace();
         }
